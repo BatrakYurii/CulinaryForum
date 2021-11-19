@@ -27,10 +27,63 @@ namespace Forum.Api.Data
         public DbSet<ArticlesCategories> ArticlesCategories { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<CuisineNationality> CuisineNationalities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<CuisineNationality>().HasData(new Category
+            {
+                Id = 1,
+                Title = "Индонезийская кухня"
+            },
+            new Category
+            {
+                Id = 2,
+                Title = "Мексиканская кухня"
+            },
+            new Category
+            {
+                Id = 3,
+                Title = "Китайская кухня"
+            },
+            new Category
+            {
+                Id = 4,
+                Title = "Итальянская кухня"
+            },
+            new Category
+            {
+                Id = 5,
+                Title = "Испанская кухня"
+            },
+            new Category
+            {
+                Id = 6,
+                Title = "Французкая кухня"
+            },
+            new Category
+            {
+                Id = 7,
+                Title = "Японская кухня"
+            },
+            new Category
+            {
+                Id = 8,
+                Title = "Индийская кухня"
+            },
+            new Category
+            {
+                Id = 9,
+                Title = "Украинская кухня"
+            },
+            new Category
+            {
+                Id = 10,
+                Title = "Русская кухня"
+            }
+            );
+
             builder.Entity<Category>().HasData(new Category
             {
                 Id = 1,

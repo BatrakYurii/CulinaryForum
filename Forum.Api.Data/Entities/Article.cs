@@ -16,6 +16,8 @@ namespace Forum.Api.Data.Entities
         public DateTime CreateDate { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public int CuisineNationalityId { get; set; }
+        public CuisineNationality CuisineNationality { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Image> Images { get; set; }
         public IEnumerable<ArticlesCategories> ArticlesCetagories { get; set; }
