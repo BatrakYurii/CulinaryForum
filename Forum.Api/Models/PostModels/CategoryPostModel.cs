@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Forum.Api.Data.Entities
+namespace Forum.Api.Models.PostModels
 {
-    public class CuisineNationality
+    public class CategoryPostModel
     {
         public int Id { get; set; }
-        public string Nationality { get; set; }
-
+        public string Title { get; set; }
     }
 }

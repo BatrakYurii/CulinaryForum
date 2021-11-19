@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Forum.Api.Data.Entities
+namespace Forum.Api.Services.Models
 {
-    public class CuisineNationality
+    public class CuisineNationalityModel
     {
         public int Id { get; set; }
         public string Nationality { get; set; }
-
     }
 }
