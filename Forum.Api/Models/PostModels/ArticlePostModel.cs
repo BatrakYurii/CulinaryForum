@@ -10,11 +10,9 @@ namespace Forum.Api.Models.PostModels
     {
         public string Title { get; set; }
         public string Content { get; set; }
-        public DateTime CreateDate { get; set; }
         public int CuisineNationalityId { get; set; }
-        public CuisineNationality CuisineNationality { get; set; }
-        public ICollection<Comment> Comments { get; set; }
-        public ICollection<Image> Images { get; set; }
+        public ICollection<CategoryPostModel> Categories { get; set; }
+        public ICollection<string> Images { get; set; }
 
     }
 }

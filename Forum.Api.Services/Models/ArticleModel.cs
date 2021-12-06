@@ -15,11 +15,12 @@ namespace Forum.Api.Services.Models
         public int Likes { get; set; }
         public int Dislikes { get; set; }
         public DateTime CreateDate { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
         public int CuisineNationalityId { get; set; }
-        public CuisineNationality CuisineNationality { get; set; }
-        public ICollection<Comment> Comments { get; set; }
-        public ICollection<Image> Images { get; set; }
+        public CuisineNationalityModel CuisineNationality { get; set; }
+        public IEnumerable<CategoryModel> Categories { get; set; }
+        public ICollection<CommentModel> Comments { get; set; }
+        public IEnumerable<string> Images { get; set; }
     }
 }

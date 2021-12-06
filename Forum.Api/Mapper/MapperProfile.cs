@@ -16,6 +16,7 @@ namespace Forum.Api.Mapper
         public MapperProfile()
         {
             CreateMap<UserPostModel, UserModel>();
+            CreateMap<UserPostModel, User>();
             CreateMap<User, UserViewModel>();
             CreateMap<UserModel, UserViewModel>();
             CreateMap<ArticlePostModel, ArticleModel>();
@@ -30,10 +31,58 @@ namespace Forum.Api.Mapper
 
             CreateMap<UserModel, User>();
             CreateMap<User, UserModel>();
-            CreateMap<ArticleModel, Article>();
-            CreateMap<Article, ArticleModel>();
+            //CreateMap<ArticleModel, Article>();
+            CreateMap<Article, ArticleModel>()
+                .ForMember(model => model.Categories,
+                opts => opts
+                .MapFrom(entity => entity.ArticlesCategories));
             CreateMap<CommentModel, Comment>();
             CreateMap<Comment, CommentModel>();
+            CreateMap<Image, string>();
+            //CreateMap<string, Image>()
+            //    .ForMember(entity => entity.Path,
+            //    opts => opts
+            //    .MapFrom(str => str));
+            CreateMap<CategoryPostModel, CategoryModel>();
+            CreateMap<CategoryModel, Category>();
+            CreateMap<CategoryModel, CategoryViewModel>();
+            CreateMap<CuisineNationalityPostModel, CuisineNationalityModel>();
+            CreateMap<CuisineNationalityModel, CuisineNationalityViewModel>();
+            CreateMap<CuisineNationality, CuisineNationalityModel>();
+            CreateMap<CuisineNationalityModel, CuisineNationalityViewModel>();
+            CreateMap<CuisineNationalityModel, CuisineNationality>()
+                .ForMember(entity => entity.Id, opts => opts.Ignore());
+
+            CreateMap<Image, string>()
+                .ConvertUsing((src, dest, ctx) =>
+                {
+                    dest = src.Path;
+                    return dest;
+                });
+            CreateMap<string, Image>()
+                .ForMember(entity => entity.Path,
+                opts => opts
+                .MapFrom(model => model.Select(img => new { Path = img })));
+
+         
+            CreateMap<ArticleModel, Article>()
+                .ForMember(entity => entity.ArticlesCategories,
+                opts => opts
+                .MapFrom(model => model.Categories))
+                .ForMember(entity => entity.Images,
+                opts => opts
+                .MapFrom(model => model.Images.Select(img => new Image { Path = img, ArticleId = model.Id })));
+            CreateMap<CategoryModel, ArticlesCategories>()
+                .ForMember(entity => entity.CategoryId,
+               opts => opts
+               .MapFrom(model => model.Id))
+                .ForMember(entity => entity.Id, opts => opts.Ignore());
+            CreateMap<ArticlesCategories, CategoryModel>()
+                .ForMember(model => model.Id,
+                opts => opts.MapFrom(entity => entity.CategoryId))
+                .ForMember(model => model.Title,
+                 opts => opts.MapFrom(entity => entity.Category.Title));
+
             //CreateMap<Skeleton, SkeletonModel>();
             //CreateMap<Human, HumanModel>()
             //    .ForMember(humanModel => humanModel.Skeleton, opts => opts.MapFrom(src => src.Skeletons.FirstOrDefault()));
