@@ -1,4 +1,6 @@
 using Forum.Api.Auth.Conficuration;
+using Forum.Api.Configuration.Abstractions;
+using Forum.Api.Configuration.Seeding;
 using Forum.Api.Data;
 using Forum.Api.Data.Abstactions;
 using Forum.Api.Data.Entities;
@@ -23,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Forum.Api
@@ -44,6 +47,7 @@ namespace Forum.Api
             services.AddTransient<IArticlesRepository, ArticlesRepository>();
             services.AddTransient<ICommentsService, CommentsService>();
             services.AddTransient<ICommentsRepository, CommentsRepository>();
+            services.AddTransient<IDbContextSeedData, DbContextSeedData>();
 
             services.AddAutoMapper(cfg =>
             {
@@ -89,7 +93,7 @@ namespace Forum.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbContextSeedData seeder)
         {
             app.UseCors(x => x
                .AllowAnyOrigin()
@@ -104,7 +108,11 @@ namespace Forum.Api
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
@@ -112,6 +120,9 @@ namespace Forum.Api
             {
                 endpoints.MapControllers();
             });
+
+            var seed = seeder.CreateAdmin();
+            seed.Wait();
         }
     }
 }
