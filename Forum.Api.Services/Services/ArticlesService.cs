@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Forum.Api.Data.Abstactions;
 using Forum.Api.Data.Entities;
+using Forum.Api.Data.Parameters;
 using Forum.Api.Services.Abstractions;
 using Forum.Api.Services.Models;
+using Forum.Api.Services.Models.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +27,7 @@ namespace Forum.Api.Services.Services
         public async Task<ArticleModel> Create(ArticleModel articleModel)
         {
             var entity = _mapper.Map<Article>(articleModel);
+            articleModel.CreateDate = DateTime.UtcNow;
 
             await _articlesRepository.Create(entity);
             articleModel.Id = entity.Id;
@@ -37,9 +40,22 @@ namespace Forum.Api.Services.Services
             await _articlesRepository.Delete(id);
         }
 
-        public async Task<IEnumerable<ArticleModel>> Get()
+        public async Task<IEnumerable<ArticleModel>> Get(PаginationModel paginationModel, SortingModel sortingModel, FiltersModel filtersModel)
         {
-            var articles = await _articlesRepository.Get();
+           
+
+            if(paginationModel.Page == null || paginationModel.PageSize == null)
+            {
+                paginationModel.Page = 1;
+                paginationModel.PageSize = 5;
+
+            }
+
+            var pagination = _mapper.Map<Pagination>(paginationModel);
+            var sorting = _mapper.Map<Sorting>(sortingModel);
+            var filter = _mapper.Map<Filter>(filtersModel);
+
+            var articles = await _articlesRepository.Get(pagination, sorting, filter);
             var articlesModel = new List<ArticleModel>();
             foreach (var article in articles)
             {

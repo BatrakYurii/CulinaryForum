@@ -31,9 +31,9 @@ namespace Forum.Api.Services.Services
             return commentModel;
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(int id, string UserId)
         {
-            await _commentsRepository.Delete(id);
+            await _commentsRepository.Delete(id, UserId);
 
         }
 
@@ -55,10 +55,10 @@ namespace Forum.Api.Services.Services
             return commentModel;
         }
 
-        public async Task<CommentModel> Update(int id, CommentModel commentModel)
+        public async Task<CommentModel> Update(int id, CommentModel commentModel, string userId)
         {
             var entity = _mapper.Map<Comment>(commentModel);
-            await _commentsRepository.Update(id, entity);
+            await _commentsRepository.Update(id, entity, userId);
             commentModel.Id = entity.Id;
 
             return commentModel;

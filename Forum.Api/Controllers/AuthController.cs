@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Forum.Api.Auth.Conficuration;
 using Forum.Api.Auth.Models;
 using Forum.Api.Data.Entities;
@@ -27,10 +28,12 @@ namespace Forum.Api.Auth.Controllers
     {
         private readonly JwtBearerTokenSettings jwtBearerTokenSettings;
         private readonly UserManager<User> userManager;
-        public AuthController(IOptions<JwtBearerTokenSettings> jwtTokenOptions,
+        private readonly IMapper mapper;
+        public AuthController(IOptions<JwtBearerTokenSettings> jwtTokenOptions, IMapper mapper,
             UserManager<User> userManager)
         {
             this.jwtBearerTokenSettings = jwtTokenOptions.Value;
+            this.mapper = mapper;
             this.userManager = userManager;
         }
 
@@ -42,8 +45,8 @@ namespace Forum.Api.Auth.Controllers
             {
                 return new BadRequestObjectResult(new { Message = "User Registration Failed" });
             }
-
-            var identityUser = new User() { UserName = userDetails.UserName, Email = userDetails.Email };
+            //var identityUser = mapper.Map<User>(userDetails);
+            var identityUser = new User() { UserName = userDetails.UserName, Email = userDetails.Email, RegisterDate = DateTime.UtcNow };
             var result = await userManager.CreateAsync(identityUser, userDetails.Password);
             var roleName = RolesEnum.User.GetEnumDescription();
 

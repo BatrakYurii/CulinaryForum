@@ -26,31 +26,40 @@ namespace Forum.Api.Data.Repositories
 
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(int id, string UserId)
         {
-            var comment = await _ctx.Comments
-                .FirstOrDefaultAsync(x => x.Id == id);
-            _ctx.Comments.Remove(comment);
+            var baseComment = await _ctx.Comments.FirstOrDefaultAsync(x => x.Id == id);
+            if (baseComment.UserId != UserId)
+            {
+                return;
+            }
+            _ctx.Comments.Remove(baseComment);
             await _ctx.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Comment>> Get()
         {
-            var comments = await _ctx.Comments.ToListAsync();
+            var comments = await _ctx.Comments.Include(x => x.Article).Include(x => x.User).AsNoTracking().ToListAsync();
             return comments;
         }
 
         public async Task<Comment> Get(int id)
         {
             var comment = await _ctx.Comments
+                .Include(x => x.Article)
+                .Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == id);
             return comment;
         }
 
-        public async Task<Comment> Update(int id, Comment comment)
+        public async Task<Comment> Update(int id, Comment comment, string userId)
         {
             var deleteComment = await _ctx.Comments
                 .FirstOrDefaultAsync(x => x.Id == id);
+            if(userId != deleteComment.UserId)
+            {
+                return null;
+            }
             _ctx.Comments.Remove(deleteComment);
             comment.Id = id;
             _ctx.Comments.Add(comment);

@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
+using Forum.Api.Data.Entities;
 using Forum.Api.Models.PostModels;
+using Forum.Api.Models.QueryParams;
 using Forum.Api.Models.ViewModels;
 using Forum.Api.Services.Abstractions;
 using Forum.Api.Services.Models;
+using Forum.Api.Services.Models.Parameters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,25 +18,33 @@ using System.Threading.Tasks;
 
 namespace Forum.Api.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class ArticlesController : ControllerBase
     {
         private readonly IArticlesService _articlesService;
+        private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-        public ArticlesController(IArticlesService articleService, IMapper mapper)
+        public ArticlesController(IArticlesService articleService, IMapper mapper, UserManager<User> userManager)
         {
             _articlesService = articleService;
+            _userManager = userManager;
             _mapper = mapper;
         }
 
-        
+
         [HttpGet]
-        public async Task<IEnumerable<ArticleViewModel>> Get()
+        public async Task<IEnumerable<ArticleViewModel>> Get([FromQuery] PaginationPostModel paginationPostModel,
+                                                             [FromQuery] SortingPostModel sortingPostModel,
+                                                             [FromQuery] FiltersPostModel filtersPostModel)
         {
-            var articlesViewModel =  await _articlesService.Get();
+            var paginationModel = _mapper.Map<PаginationModel>(paginationPostModel);
+            var sortingModel = _mapper.Map<SortingModel>(sortingPostModel);
+            var filtersModel = _mapper.Map<FiltersModel>(filtersPostModel);
+
+            var articlesViewModel = await _articlesService.Get(paginationModel, sortingModel, filtersModel);
             var articlesModel = new List<ArticleViewModel>();
             foreach (var article in articlesViewModel)
             {
@@ -50,7 +62,7 @@ namespace Forum.Api.Controllers
             return _mapper.Map<ArticleViewModel>(articleModel);
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize]
         [HttpPost]
         [Route("New")]
         public async Task<ArticleViewModel> Greate(ArticlePostModel articlePostModel)
@@ -64,24 +76,28 @@ namespace Forum.Api.Controllers
             return _mapper.Map<ArticleViewModel>(createdModel);
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize]
         [HttpPut]
-        [Route ("Change")]
-        public async Task<ArticleViewModel> Update(int id, ArticlePostModel articlePostModel)
+        [Route("Edit/{id}")]
+        public async Task<ArticleViewModel> Update([FromRoute]int id, [FromBody]ArticlePostModel articlePostModel)
         {
             var createModel = _mapper.Map<ArticleModel>(articlePostModel);
+
+            createModel.UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
             var createdModel = await _articlesService.Update(id, createModel);
 
             return _mapper.Map<ArticleViewModel>(createdModel);
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Admin, Manager")]
         [HttpDelete]
-        [Route("{id}")]
-        public void Delete(int id)
+        [Route("Delete/{id}")]
+        public async Task Delete([FromRoute]int id)
         {
-            _articlesService.Delete(id);
+
+            //var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            await _articlesService.Delete(id);
         }
     }
 }

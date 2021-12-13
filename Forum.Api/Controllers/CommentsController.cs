@@ -3,15 +3,18 @@ using Forum.Api.Models.PostModels;
 using Forum.Api.Models.ViewModels;
 using Forum.Api.Services.Abstractions;
 using Forum.Api.Services.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Forum.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CommentsController : ControllerBase
@@ -25,10 +28,12 @@ namespace Forum.Api.Controllers
             _mapper = mapper;
         }
 
+        [Route("New")]
         [HttpPost]
         public async Task<CommentViewModel> Create(CommentPostModel model)
         {
             var createModel = _mapper.Map<CommentModel>(model);
+            createModel.UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
             var createdModel = await _commentsService.Create(createModel);
 
@@ -44,10 +49,12 @@ namespace Forum.Api.Controllers
             return _mapper.Map<CommentViewModel>(userModel);
         }
 
+        [Route("Delete/{id}")]
         [HttpDelete]
         public async Task Delete(int id)
         {
-            await _commentsService.Delete(id);
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            await _commentsService.Delete(id, userId);
         }
 
         [HttpGet]
@@ -64,11 +71,14 @@ namespace Forum.Api.Controllers
         }
 
         [HttpPut]
+        [Route("Edit/{id}")]
         public async Task<CommentViewModel> Update(int id, CommentPostModel commentPostModel)
         {
             var createModel = _mapper.Map<CommentModel>(commentPostModel);
 
-            var createdModel = await _commentsService.Update(id, createModel);
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value; 
+
+            var createdModel = await _commentsService.Update(id, createModel, userId);
 
             return _mapper.Map<CommentViewModel>(createdModel);
         }
