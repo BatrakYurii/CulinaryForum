@@ -1,0 +1,42 @@
+.App {
+  text-align: center;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 10vh;
+  background-color: lightblue;
+  color: white;
+  font-family: fantasy ;
+  font-size: larger;
+}
+
+.nav-links {
+  width: 40%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
+}
+
+.form-style {
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  width: fit-content;
+}
+
+.game-icons {
+  width: 90%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
+}
+
+img {
+  height: 200px;
+  width: 200px;
+}
