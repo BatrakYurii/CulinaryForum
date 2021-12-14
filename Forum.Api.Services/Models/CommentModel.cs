@@ -12,7 +12,7 @@ namespace Forum.Api.Services.Models
         public string Content { get; set; }
         public int ArticleId { get; set; }
         public ArticleModel Article{ get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public UserModel User{ get; set; }
     }
 }

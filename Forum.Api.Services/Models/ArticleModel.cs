@@ -18,6 +18,8 @@ namespace Forum.Api.Services.Models
         public string UserId { get; set; }
         public User User { get; set; }
         public int CuisineNationalityId { get; set; }
+        public bool IsVegan { get; set; }
+        public DateTime CookingTime { get; set; }
         public CuisineNationalityModel CuisineNationality { get; set; }
         public IEnumerable<CategoryModel> Categories { get; set; }
         public ICollection<CommentModel> Comments { get; set; }

@@ -14,9 +14,7 @@ namespace Forum.Api.Configuration.Seeding
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public DbContextSeedData(
-            UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager)
+        public DbContextSeedData(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -25,9 +23,9 @@ namespace Forum.Api.Configuration.Seeding
         public async Task CreateAdmin()
         {
             var roleName = RolesEnum.Admin.GetEnumDescription();
-            var roleFromDb = await _roleManager.FindByNameAsync(roleName);
+            var role = await _roleManager.FindByNameAsync(roleName);
 
-            if (roleFromDb != null)
+            if (role != null)
             {
                 var admin = new User(){UserName = "admin", NormalizedUserName = "ADMIN", Email = "admin@culinaryforum.com", NormalizedEmail = "ADMIN@CULINARYFORUM.COM"};
 

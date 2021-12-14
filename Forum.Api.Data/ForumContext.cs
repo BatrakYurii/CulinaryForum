@@ -32,55 +32,55 @@ namespace Forum.Api.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<CuisineNationality>().HasData(new Category
+            builder.Entity<CuisineNationality>().HasData(new CuisineNationality
             {
                 Id = 1,
-                Title = "Индонезийская кухня"
+                Nationality = "Индонезийская кухня"
             },
-            new Category
+            new CuisineNationality
             {
                 Id = 2,
-                Title = "Мексиканская кухня"
+                Nationality = "Мексиканская кухня"
             },
-            new Category
+            new CuisineNationality
             {
                 Id = 3,
-                Title = "Китайская кухня"
+                Nationality = "Китайская кухня"
             },
-            new Category
+            new CuisineNationality
             {
                 Id = 4,
-                Title = "Итальянская кухня"
+                Nationality = "Итальянская кухня"
             },
-            new Category
+            new CuisineNationality
             {
                 Id = 5,
-                Title = "Испанская кухня"
+                Nationality = "Испанская кухня"
             },
-            new Category
+            new CuisineNationality
             {
                 Id = 6,
-                Title = "Французкая кухня"
+                Nationality = "Французкая кухня"
             },
-            new Category
+            new CuisineNationality
             {
                 Id = 7,
-                Title = "Японская кухня"
+                Nationality = "Японская кухня"
             },
-            new Category
+            new CuisineNationality
             {
                 Id = 8,
-                Title = "Индийская кухня"
+                Nationality = "Индийская кухня"
             },
-            new Category
+            new CuisineNationality
             {
                 Id = 9,
-                Title = "Украинская кухня"
+                Nationality = "Украинская кухня"
             },
-            new Category
+            new CuisineNationality
             {
                 Id = 10,
-                Title = "Русская кухня"
+                Nationality = "Русская кухня"
             }
             );
 
@@ -140,6 +140,7 @@ namespace Forum.Api.Data
                 Title = "Соусы и маринады",
             }
             );
+
             var admin = new IdentityRole("Admin");
             admin.NormalizedName = admin.Name.ToUpper();
             var manager = new IdentityRole("Manager");
@@ -148,6 +149,6 @@ namespace Forum.Api.Data
             user.NormalizedName = user.Name.ToUpper();
             builder.Entity<IdentityRole>().HasData(
                 admin, manager, user);
-    }
+        }
     }
 }

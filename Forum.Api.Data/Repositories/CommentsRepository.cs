@@ -1,5 +1,6 @@
 ﻿using Forum.Api.Data.Abstactions;
 using Forum.Api.Data.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -37,13 +38,13 @@ namespace Forum.Api.Data.Repositories
             await _ctx.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Comment>> Get()
+        public async Task<IEnumerable<Comment>> Get(int articleId)
         {
-            var comments = await _ctx.Comments.Include(x => x.Article).Include(x => x.User).AsNoTracking().ToListAsync();
+            var comments = await _ctx.Comments.Where(x => x.ArticleId == articleId).Include(x => x.Article).Include(x => x.User).AsNoTracking().ToListAsync();
             return comments;
         }
 
-        public async Task<Comment> Get(int id)
+        public async Task<Comment> GetById(int id)
         {
             var comment = await _ctx.Comments
                 .Include(x => x.Article)
@@ -58,7 +59,7 @@ namespace Forum.Api.Data.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id);
             if(userId != deleteComment.UserId)
             {
-                return null;
+               throw new BadHttpRequestException("You have not enough rules");
             }
             _ctx.Comments.Remove(deleteComment);
             comment.Id = id;

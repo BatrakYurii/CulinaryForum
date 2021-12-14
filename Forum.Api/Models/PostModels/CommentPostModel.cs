@@ -8,8 +8,6 @@ namespace Forum.Api.Models.PostModels
     public class CommentPostModel
     {
         public string Content { get; set; }
-        public int Raiting { get; set; }
-        public ArticlePostModel Article { get; set; }
-        public UserPostModel User { get; set; }
+        public int ArticleId { get; set; }
     }
 }

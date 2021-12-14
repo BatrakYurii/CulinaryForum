@@ -29,27 +29,29 @@ namespace Forum.Api.Data.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CookingTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Dislikes")
+                    b.Property<int>("CuisineNationalityId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Likes")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsVegan")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("CuisineNationalityId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Articles");
                 });
@@ -64,10 +66,7 @@ namespace Forum.Api.Data.Migrations
                     b.Property<int>("ArticleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CaregoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -158,28 +157,89 @@ namespace Forum.Api.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ArticlId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ArticleId")
+                    b.Property<int>("ArticleId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ArticleId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Forum.Api.Data.Entities.CuisineNationality", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Nationality")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CuisineNationalities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Nationality = "Индонезийская кухня"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Nationality = "Мексиканская кухня"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Nationality = "Китайская кухня"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Nationality = "Итальянская кухня"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Nationality = "Испанская кухня"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Nationality = "Французкая кухня"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Nationality = "Японская кухня"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Nationality = "Индийская кухня"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Nationality = "Украинская кухня"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Nationality = "Русская кухня"
+                        });
                 });
 
             modelBuilder.Entity("Forum.Api.Data.Entities.Image", b =>
@@ -193,6 +253,9 @@ namespace Forum.Api.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -209,6 +272,9 @@ namespace Forum.Api.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("AvatarImage")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -299,22 +365,22 @@ namespace Forum.Api.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fd7c71c7-1ded-4fb1-ad85-089796b11b2c",
-                            ConcurrencyStamp = "9758ae62-21d9-4494-adcf-5fae090fd763",
+                            Id = "fb68540d-c59d-42d6-a187-1de7064f1f99",
+                            ConcurrencyStamp = "673ad90b-b643-4c41-8637-a616514685ae",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "751a9686-fcc0-431f-ae3c-193188a21c87",
-                            ConcurrencyStamp = "5a10b017-3a97-4019-8fcc-4a7f1edef3ef",
+                            Id = "f2ddff3a-f6ef-407d-862e-1194aefc0599",
+                            ConcurrencyStamp = "25feebb6-dac9-4152-b0f6-96b0edd51bf0",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "82820396-17a1-4f8b-928d-49ea80ca3395",
-                            ConcurrencyStamp = "84484210-64aa-46a4-ad71-8123fe12be6a",
+                            Id = "e92974fb-5319-4620-a2f4-a27ec331b5bf",
+                            ConcurrencyStamp = "9e1f2515-9f17-4514-a795-87aa2425f073",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -426,9 +492,17 @@ namespace Forum.Api.Data.Migrations
 
             modelBuilder.Entity("Forum.Api.Data.Entities.Article", b =>
                 {
+                    b.HasOne("Forum.Api.Data.Entities.CuisineNationality", "CuisineNationality")
+                        .WithMany()
+                        .HasForeignKey("CuisineNationalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Forum.Api.Data.Entities.User", "User")
                         .WithMany("Articles")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("CuisineNationality");
 
                     b.Navigation("User");
                 });
@@ -436,14 +510,16 @@ namespace Forum.Api.Data.Migrations
             modelBuilder.Entity("Forum.Api.Data.Entities.ArticlesCategories", b =>
                 {
                     b.HasOne("Forum.Api.Data.Entities.Article", "Article")
-                        .WithMany("ArticlesCetagories")
+                        .WithMany("ArticlesCategories")
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Forum.Api.Data.Entities.Category", "Category")
-                        .WithMany("ArticlesCetagories")
-                        .HasForeignKey("CategoryId");
+                        .WithMany("ArticlesCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Article");
 
@@ -454,11 +530,13 @@ namespace Forum.Api.Data.Migrations
                 {
                     b.HasOne("Forum.Api.Data.Entities.Article", "Article")
                         .WithMany("Comments")
-                        .HasForeignKey("ArticleId");
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Forum.Api.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Article");
 
@@ -529,7 +607,7 @@ namespace Forum.Api.Data.Migrations
 
             modelBuilder.Entity("Forum.Api.Data.Entities.Article", b =>
                 {
-                    b.Navigation("ArticlesCetagories");
+                    b.Navigation("ArticlesCategories");
 
                     b.Navigation("Comments");
 
@@ -538,7 +616,7 @@ namespace Forum.Api.Data.Migrations
 
             modelBuilder.Entity("Forum.Api.Data.Entities.Category", b =>
                 {
-                    b.Navigation("ArticlesCetagories");
+                    b.Navigation("ArticlesCategories");
                 });
 
             modelBuilder.Entity("Forum.Api.Data.Entities.User", b =>

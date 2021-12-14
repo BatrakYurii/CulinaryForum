@@ -10,10 +10,10 @@ namespace Forum.Api.Data.Abstactions
 {
     public interface ICommentsRepository
     {
-        Task<IEnumerable<Comment>> Get();
-        Task<Comment> Get(int id);
-        Task<Comment> Update(int id, Comment comment);
+        Task<IEnumerable<Comment>> Get(int id);
+        Task<Comment> GetById(int id);
+        Task<Comment> Update(int id, Comment comment, string userId);
         Task<Comment> Create(Comment comment);
-        Task Delete(int id);
+        Task Delete(int id, string UserId);
     }
 }

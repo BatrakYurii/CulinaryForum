@@ -25,7 +25,10 @@ namespace Forum.Api.Mapper
             CreateMap<UserModel, UserViewModel>();
             CreateMap<ArticlePostModel, ArticleModel>();
             CreateMap<Article, ArticleViewModel>();
-            CreateMap<ArticleModel, ArticleViewModel>();
+            CreateMap<ArticleModel, ArticleViewModel>()
+                .ForMember(model => model.CookingTime,
+                opts => opts
+                .MapFrom(entity => entity.CookingTime.ToString("HH:mm")));
             CreateMap<CommentPostModel, CommentModel>();
             CreateMap<Comment, CommentViewModel>();
             CreateMap<CommentModel, CommentViewModel>();
@@ -36,23 +39,23 @@ namespace Forum.Api.Mapper
 
             CreateMap<UserModel, User>();
             CreateMap<User, UserModel>();
-            CreateMap<CookingTimePostModel, TimeSpan>()
-                .ConvertUsing((src, dest, ctx) =>
-                {
-                    dest = new TimeSpan(src.Hours, src.Minutes, 0);
-                    return dest;
-                });
-            CreateMap<TimeSpan, CookingTimeViewModel>()
-                .ConvertUsing((src, dest, ctx) =>
-                {
-                    dest = new CookingTimeViewModel();
+            //CreateMap<CookingTimePostModel, TimeSpan>()
+            //    .ConvertUsing((src, dest, ctx) =>
+            //    {
+            //        dest = new TimeSpan(src.Hours, src.Minutes, 0);
+            //        return dest;
+            //    });
+            //CreateMap<TimeSpan, CookingTimeViewModel>()
+            //    .ConvertUsing((src, dest, ctx) =>
+            //    {
+            //        dest = new CookingTimeViewModel();
 
-                    dest.Hours = src.Hours;
-                    dest.Minutes = src.Minutes;
-                    //dest.Hours = (int)Math.Floor(src.TotalHours);
-                    //dest.Minutes = src.Hours;
-                    return dest;
-                });
+            //        dest.Hours = src.Hours;
+            //        dest.Minutes = src.Minutes;
+            //        //dest.Hours = (int)Math.Floor(src.TotalHours);
+            //        //dest.Minutes = src.Hours;
+            //        return dest;
+            //    });
 
             //CreateMap<ArticleModel, Article>();
             CreateMap<Article, ArticleModel>()
@@ -118,15 +121,18 @@ namespace Forum.Api.Mapper
             CreateMap<SortingModel, Sorting>()
                 .ConvertUsing((src, dest, ctx) =>
                 {
-                    if (!src.SortDirection.HasValue)
+                    if (src.SortDirection.HasValue)
+                    {
+                        dest = new Sorting();
+                        dest.IsAscending = src.SortDirection == SortDirectionEnum.Ascending;
+                        dest.SortingExpression = article => article.CreateDate;
+                        return dest;
+                    }
+                    else
                     {
                         return null;
                     }
-                    dest = new Sorting();
-                    dest.IsAscending = src.SortDirection == SortDirectionEnum.Ascending;
-                    dest.SortingExpression = article => article.CreateDate;
-                   
-                    return dest;
+                    
                 }
                 );
             CreateMap<FiltersModel, Filter>()
@@ -150,20 +156,16 @@ namespace Forum.Api.Mapper
                     {
                         dest.Predicates.Add(article => article.CuisineNationalityId == src.NationalityId);
                     }
-                    if (src.IsVegan.HasValue)
+                   
+                    if (src.IsVegan == true)
+                        dest.Predicates.Add(article => article.IsVegan == true);
+                    else
                     {
-                        if (src.IsVegan == true)
-                            dest.Predicates.Add(article => article.IsVegan == true);
+                        dest.Predicates.Add(article => article.IsVegan == false);
                     }
-                    if (!string.IsNullOrEmpty(src.SearchingRequest))
-                    {
-                        dest.Predicates.Add(article => article.Title.Contains(src.SearchingRequest));
-                        dest.Predicates.Add(article => article.Content.Contains(src.SearchingRequest));
-                    }
-                    if (dest.Predicates.Count == 0)
-                    {
-                        return null;
-                    }
+                    
+                   
+                    
                     return dest;
                 });
         }

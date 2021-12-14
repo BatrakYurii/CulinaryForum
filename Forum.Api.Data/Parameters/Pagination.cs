@@ -8,8 +8,8 @@ namespace Forum.Api.Data.Parameters
 {
     public class Pagination
     {
-        public int? Page { get; set; }
-        public int? PageSize { get; set; }
+        public int Page { get; set; }
+        public int PageSize { get; set; }
         public int PagesCount { get; set; }
     }
 }

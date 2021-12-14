@@ -37,9 +37,9 @@ namespace Forum.Api.Services.Services
 
         }
 
-        public async Task<IEnumerable<CommentModel>> Get()
+        public async Task<IEnumerable<CommentModel>> Get(int id)
         {
-            var comments = await _commentsRepository.Get();
+            var comments = await _commentsRepository.Get(id);
             var commentsModel = new List<CommentModel>();
             foreach (var comment in comments)
             {
@@ -48,7 +48,7 @@ namespace Forum.Api.Services.Services
             return commentsModel;
         }
 
-        public async Task<CommentModel> Get(int id)
+        public async Task<CommentModel> GetById(int id)
         {
             var model = await _commentsRepository.Get(id);
             var commentModel = _mapper.Map<CommentModel>(model);

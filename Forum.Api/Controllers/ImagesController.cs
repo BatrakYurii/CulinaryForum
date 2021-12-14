@@ -21,21 +21,20 @@ namespace Forum.Api.Controllers
     [ApiController]
     public class ImagesController : ControllerBase
     {
-        private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _webHost;
         private readonly UserManager<User> _userManager;
         private readonly IImagesService _imagesService;
-        public ImagesController(IMapper mapper, IWebHostEnvironment webHost, UserManager<User> userManager)
+        public ImagesController(IMapper mapper, IWebHostEnvironment webHost, UserManager<User> userManager, IImagesService imagesService)
         {
-            _mapper = mapper;
             _webHost = webHost;
             _userManager = userManager;
+            _imagesService = imagesService;
         }
 
         [Authorize(Roles = "Manager, User")]
-        [Route("UserIcon")]
+        [Route("UserAvatar")]
         [HttpPost]
-        public async Task AddOrReplaceProfileImage([FromForm]IFormFile imgFile)
+        public async Task AddOrReplaceProfileImage(IFormFile imgFile)
         {
             if (imgFile != null)
             {
@@ -48,10 +47,11 @@ namespace Forum.Api.Controllers
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
                 var user = await _userManager.FindByIdAsync(userId);
 
-                var imagePath = Path.Combine(_webHost.WebRootPath, user.AvatarImage);
+               
 
                 if(user.AvatarImage != null)
                 {
+                    var imagePath = Path.Combine(_webHost.WebRootPath, user.AvatarImage);
                     System.IO.File.Delete(imagePath);
                 }               
 
@@ -64,9 +64,10 @@ namespace Forum.Api.Controllers
             }
         }
 
-        [Route("articles/{articleId}")]
+        [Authorize]
+        [Route("articleImages/{articleId}/{articleUserId}")]
         [HttpPost]
-        public async Task AddArticlesImages([FromForm] IFormFileCollection images, [FromRoute] int articleId, string articleUserId )
+        public async Task AddArticlesImages([FromForm] IFormFileCollection images, [FromRoute] int articleId,[FromRoute] string articleUserId )
         {
             if (images.Count != 0) 
             {

@@ -47,6 +47,8 @@ namespace Forum.Api
             services.AddTransient<IArticlesRepository, ArticlesRepository>();
             services.AddTransient<ICommentsService, CommentsService>();
             services.AddTransient<ICommentsRepository, CommentsRepository>();
+            services.AddTransient<IImagesService, ImagesService>();
+            services.AddTransient<IImagesRepository, ImagesRepository>();
             services.AddTransient<IDbContextSeedData, DbContextSeedData>();
 
             services.AddAutoMapper(cfg =>
@@ -59,7 +61,8 @@ namespace Forum.Api
             });
 
             services.AddCors();
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(x =>
+   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); ;
             services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                .AddEntityFrameworkStores<ForumContext>();
 

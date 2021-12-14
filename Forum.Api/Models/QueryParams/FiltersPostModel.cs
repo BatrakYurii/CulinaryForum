@@ -8,7 +8,6 @@ namespace Forum.Api.Models.QueryParams
 {
     public class FiltersPostModel
     {
-        public string SearchingRequest { get; set; }
         public int? NationalityId { get; set; }
         public int? CategoryId { get; set; }
         public bool? IsVegan { get; set; }

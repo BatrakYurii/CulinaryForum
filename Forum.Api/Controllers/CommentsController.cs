@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Forum.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CommentsController : ControllerBase
@@ -44,7 +44,7 @@ namespace Forum.Api.Controllers
         [Route("{id}")]
         public async Task<CommentViewModel> GetById(int id)
         {
-            var userModel = await _commentsService.Get(id);
+            var userModel = await _commentsService.GetById(id);
 
             return _mapper.Map<CommentViewModel>(userModel);
         }
@@ -58,9 +58,10 @@ namespace Forum.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CommentViewModel>> Get()
+        [Route("ForArticles/{id}")]
+        public async Task<IEnumerable<CommentViewModel>> Get([FromRoute] int id)
         {
-            var commentsViewModel = await _commentsService.Get();
+            var commentsViewModel = await _commentsService.Get(id);
             var commentsModel = new List<CommentViewModel>();
             foreach (var comment in commentsViewModel)
             {

@@ -64,17 +64,17 @@ namespace Forum.Api.Data.Repositories
             var skip = (pagination.Page - 1) * pagination.PageSize;
             var take = pagination.PageSize;
 
-            return await articles
+             return await articles
                 .Skip(skip)
                 .Take(take)
+                .Include(x => x.Comments)
                 .Include(a => a.User)
                 .Include(x => x.CuisineNationality)
                 .Include(x => x.Images)
-                .Include(x => x.Comments)
                 .Include(x => x.ArticlesCategories)
                     .ThenInclude(x => x.Category)
                     .AsNoTracking().ToListAsync();
-            
+
         }
 
         public async Task<Article> Get(int id)

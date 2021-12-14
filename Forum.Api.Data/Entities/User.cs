@@ -10,6 +10,7 @@ namespace Forum.Api.Data.Entities
     public class User : IdentityUser
     {
         public ICollection<Article> Articles { get; set; }
+        public string AvatarImage { get; set; }
         public DateTime RegisterDate { get; set; }
     }
 }

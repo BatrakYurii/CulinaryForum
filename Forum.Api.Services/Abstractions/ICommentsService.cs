@@ -9,10 +9,10 @@ namespace Forum.Api.Services.Abstractions
 {
     public interface ICommentsService
     {
-        public Task<IEnumerable<CommentModel>> Get();
-        public Task<CommentModel> Get(int id);
-        public Task<CommentModel> Update(int id, CommentModel commentModel);
+        public Task<IEnumerable<CommentModel>> Get(int id);
+        public Task<CommentModel> GetById(int id);
+        public Task<CommentModel> Update(int id, CommentModel comment, string userId);
         public Task<CommentModel> Create(CommentModel commentModel);
-        public Task Delete(int id);
+        public Task Delete(int id, string UserId);
     }
 }

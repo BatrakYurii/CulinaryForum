@@ -8,9 +8,10 @@ namespace Forum.Api.Services.Models
 {
     public class UserModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public string Email { get; set; }
+        public DateTime RegiterDate { get; set; }
     }
 }

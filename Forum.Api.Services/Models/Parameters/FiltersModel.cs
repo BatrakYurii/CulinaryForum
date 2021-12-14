@@ -10,7 +10,6 @@ namespace Forum.Api.Services.Models.Parameters
 {
     public class FiltersModel
     {
-        public string SearchingRequest { get; set; }
         public int? NationalityId { get; set; }
         public int? CategoryId { get; set; }
         public bool? IsVegan { get; set; }
